@@ -5,6 +5,7 @@ import styles from './Gallery.module.css';
 import { PhotoGrid } from './PhotoGrid';
 import { Lightbox } from './Lightbox';
 import { NameDialog } from './NameDialog';
+import { DownloadPanel } from './DownloadPanel';
 import type { ClientPhoto } from './types';
 
 export interface GalleryViewProps {
@@ -101,11 +102,14 @@ export function GalleryView({ slug, title, photos, chapters, initialFavoriteIds,
             </div>
           );
         })}
+        {photos.length > 0 && (
+          <DownloadPanel slug={slug} hasFavorites={favoriteIds.size > 0} onNeedName={() => setPendingFavorite('')} />
+        )}
       </section>
       {openIndex !== null && ordered[openIndex] && (
         <Lightbox slug={slug} photos={ordered} index={openIndex} favoriteIds={favoriteIds} onToggleFavorite={toggleFavorite} onNavigate={navigate} onClose={close} />
       )}
-      {pendingFavorite && <NameDialog onSubmit={submitName} onCancel={() => setPendingFavorite(null)} />}
+      {pendingFavorite !== null && <NameDialog onSubmit={submitName} onCancel={() => setPendingFavorite(null)} />}
     </>
   );
 }
