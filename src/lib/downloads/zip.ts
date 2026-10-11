@@ -3,7 +3,9 @@ import type { Storage } from '@/lib/storage';
 import type { Photo } from '@/lib/photos/repo';
 import { contentDisposition, dedupeNames } from './filename';
 
-export const ZIP_PART_MAX_BYTES = 2 * 1024 ** 3;
+// Cada parte tem de terminar dentro do maxDuration (300 s) da rota:
+// 500 MB em 300 s ≈ 14 Mbit/s, ao alcance de Wi-Fi doméstico ou 4G.
+export const ZIP_PART_MAX_BYTES = 500 * 1024 ** 2;
 export const ZIP_PART_MAX_COUNT = 200;
 
 export function planZipParts<T extends { bytes: number }>(items: T[], maxBytes = ZIP_PART_MAX_BYTES, maxCount = ZIP_PART_MAX_COUNT): T[][] {

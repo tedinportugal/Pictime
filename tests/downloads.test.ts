@@ -58,6 +58,12 @@ describe('planZipParts', () => {
     expect(planZipParts(items, 1000, 2).map((p) => p.length)).toEqual([2, 2, 1]);
     expect(planZipParts([], 10, 10)).toEqual([]);
   });
+  it('por omissão, cada parte cabe nos 300 s da função mesmo numa ligação de ~15 Mbit/s', () => {
+    const MB = 1024 ** 2;
+    const parts = planZipParts(Array.from({ length: 10 }, () => ({ bytes: 100 * MB })));
+    expect(parts.map((p) => p.length)).toEqual([5, 5]);
+    for (const p of parts) expect(p.reduce((s, x) => s + x.bytes, 0)).toBeLessThanOrEqual(500 * MB);
+  });
 });
 
 describe('download individual', () => {
