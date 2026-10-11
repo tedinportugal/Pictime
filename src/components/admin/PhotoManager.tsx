@@ -9,14 +9,18 @@ export function PhotoManager({ gallery, photos, chapters }: { gallery: EditorGal
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [newChapter, setNewChapter] = useState('');
+  const [busy, setBusy] = useState(false);
 
   async function run(fn: () => Promise<unknown>) {
     setError(null);
+    setBusy(true);
     try {
       await fn();
       router.refresh();
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -53,8 +57,8 @@ export function PhotoManager({ gallery, photos, chapters }: { gallery: EditorGal
             <figure key={p.id} className={`${styles.photoCard} ${gallery.coverPhotoId === p.id ? styles.cover : ''}`} style={{ margin: 0 }}>
               <img src={p.thumbUrl} alt={p.filename} loading="lazy" />
               <div className={styles.row}>
-                <button className={styles.ghost} aria-label="Mover para trás" disabled={i === 0} onClick={() => move(i, -1)}>←</button>
-                <button className={styles.ghost} aria-label="Mover para a frente" disabled={i === photos.length - 1} onClick={() => move(i, 1)}>→</button>
+                <button className={styles.ghost} aria-label="Mover para trás" disabled={busy || i === 0} onClick={() => move(i, -1)}>←</button>
+                <button className={styles.ghost} aria-label="Mover para a frente" disabled={busy || i === photos.length - 1} onClick={() => move(i, 1)}>→</button>
                 <button className={styles.ghost} onClick={() => run(() => api(`/api/admin/galleries/${gallery.id}`, 'PATCH', { coverPhotoId: p.id }))}>
                   {gallery.coverPhotoId === p.id ? 'Capa ✓' : 'Capa'}
                 </button>

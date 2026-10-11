@@ -1,4 +1,4 @@
-import { and, asc, count, eq } from 'drizzle-orm';
+import { and, asc, count, eq, inArray, sql } from 'drizzle-orm';
 import type { Db } from '@/db/client';
 import { photos } from '@/db/schema';
 import { isUuid } from '@/lib/http';
@@ -28,11 +28,15 @@ export async function getPhotoById(db: Db, photoId: string): Promise<Photo | nul
   return row ?? null;
 }
 
+/** Uma só instrução UPDATE … CASE: com o Neon por HTTP, um UPDATE por foto demoraria segundos. */
 export async function reorderPhotos(db: Db, galleryId: string, ids: string[]): Promise<void> {
-  for (const [i, id] of ids.entries()) {
-    if (!isUuid(id)) continue;
-    await db.update(photos).set({ order: i }).where(and(eq(photos.id, id), eq(photos.galleryId, galleryId)));
-  }
+  const valid = ids.map((id, i) => [id, i] as const).filter(([id]) => isUuid(id));
+  if (valid.length === 0) return;
+  const cases = sql.join(valid.map(([id, i]) => sql`when ${photos.id} = ${id} then ${i}::integer`), sql` `);
+  await db
+    .update(photos)
+    .set({ order: sql`case ${cases} end` })
+    .where(and(eq(photos.galleryId, galleryId), inArray(photos.id, valid.map(([id]) => id))));
 }
 
 export async function setPhotoChapter(db: Db, photoId: string, chapterId: string | null): Promise<Photo | null> {

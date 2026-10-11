@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTestDb } from './helpers/db';
 import { createTempStorage } from './helpers/storage';
 import { makeJpeg } from './helpers/images';
@@ -59,6 +59,32 @@ describe('repositório de fotos', () => {
     expect(urls).toEqual([a.originalUrl, a.webUrl, a.thumbUrl]);
     expect(await getPhoto(db, g.id, a.id)).toBeNull();
     expect(await getPhoto(db, g.id, 'abc')).toBeNull();
+  });
+});
+
+describe('reorderPhotos', () => {
+  it('reordena com uma única instrução UPDATE (rápido em galerias grandes)', async () => {
+    const g = await createGallery(db, { title: 'A' });
+    const img = await makeJpeg(100, 100);
+    const ps = [];
+    for (const n of ['a', 'b', 'c', 'd']) ps.push(await upload(g.id, `${n}.jpg`, img));
+    const spy = vi.spyOn(db, 'update');
+    await reorderPhotos(db, g.id, [ps[3].id, ps[1].id, ps[0].id, ps[2].id]);
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+    expect((await listPhotos(db, g.id)).map((p) => p.filename)).toEqual(['d.jpg', 'b.jpg', 'a.jpg', 'c.jpg']);
+  });
+
+  it('ignora ids de outra galeria e ids malformados', async () => {
+    const g = await createGallery(db, { title: 'A' });
+    const other = await createGallery(db, { title: 'B' });
+    const img = await makeJpeg(100, 100);
+    const a = await upload(g.id, 'a.jpg', img);
+    const x = await upload(other.id, 'x.jpg', img);
+    await reorderPhotos(db, g.id, ['abc', x.id, a.id]);
+    expect((await listPhotos(db, other.id))[0].order).toBe(0);
+    expect((await listPhotos(db, g.id))[0].order).toBe(2);
+    await reorderPhotos(db, g.id, []);
   });
 });
 
