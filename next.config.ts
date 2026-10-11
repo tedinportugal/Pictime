@@ -1,9 +1,7 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+const config: NextConfig = {
+  serverExternalPackages: ['sharp', '@electric-sql/pglite'],
 };
 
-export default nextConfig;
+export default config;

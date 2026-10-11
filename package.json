@@ -5,17 +5,32 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "e2e:server": "node scripts/reset-e2e.mjs && next dev --port 3100",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@neondatabase/serverless": "^1.2.0",
+    "@vercel/blob": "^2.8.1",
+    "client-zip": "^2.5.1",
+    "drizzle-orm": "^0.45.4",
     "next": "16.4.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "sharp": "^0.35.5",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5"
+    "drizzle-kit": "^0.31.11",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
   }
 }
