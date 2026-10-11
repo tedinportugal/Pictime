@@ -28,12 +28,11 @@ describe('login do fotógrafo', () => {
     expect(res.headers.get('location')).toBe('/admin/login?error=1');
     expect(res.headers.get('set-cookie')).toBeNull();
   });
-  it('ao fim de 5 tentativas erradas bloqueia esse IP, mesmo com a palavra-passe certa', async () => {
-    for (let i = 0; i < MAX_ATTEMPTS; i++) await login(form('errada'));
-    const blocked = await login(form('correct-horse-battery'));
-    expect(blocked.headers.get('location')).toBe('/admin/login?error=limit');
-    expect(blocked.headers.get('set-cookie')).toBeNull();
-    expect((await login(form('correct-horse-battery', '2.2.2.2'))).headers.get('set-cookie')).not.toBeNull();
+  it('não bloqueia o fotógrafo depois de várias tentativas erradas', async () => {
+    for (let i = 0; i < MAX_ATTEMPTS + 2; i++) await login(form('errada'));
+    const res = await login(form('correct-horse-battery'));
+    expect(res.headers.get('location')).toBe('/admin');
+    expect(res.headers.get('set-cookie')).toMatch(/^admin_session=/);
   });
   it('reconhece pedidos autenticados', () => {
     expect(isAdminRequest(new Request('http://x', { headers: { cookie: adminCookieHeader() } }))).toBe(true);

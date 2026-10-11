@@ -12,8 +12,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             Palavra-passe
             <input type="password" name="password" required autoFocus autoComplete="current-password" />
           </label>
-          {error === 'limit' && <p className={styles.error}>Demasiadas tentativas. Tenta daqui a 15 minutos.</p>}
-          {error === '1' && <p className={styles.error}>Palavra-passe incorreta.</p>}
+          {error && <p className={styles.error}>Palavra-passe incorreta.</p>}
           <button className={styles.button} type="submit">Entrar</button>
         </form>
       </main>
