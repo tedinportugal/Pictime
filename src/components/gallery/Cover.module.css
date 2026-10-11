@@ -1,0 +1,11 @@
+.cover { position: relative; height: 100svh; overflow: hidden; background: #111; color: #fff; }
+.image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kenburns 20s ease-out forwards; }
+@keyframes kenburns { from { transform: scale(1.08); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .image { animation: none; } }
+.shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.04) 40%, rgba(0,0,0,.5)); }
+.logo { position: absolute; top: 28px; left: 50%; transform: translateX(-50%); max-height: 40px; max-width: 60vw; }
+.brand { position: absolute; top: 28px; left: 0; right: 0; text-align: center; font-family: var(--font-heading); font-style: italic; font-size: 1.25rem; }
+.content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 0 16px 12svh; text-align: center; }
+.title { font-family: var(--font-heading); font-style: italic; font-weight: 300; font-size: clamp(2.5rem, 10vw, 6.5rem); line-height: 1; margin: 0; overflow-wrap: anywhere; }
+.subtitle { text-transform: uppercase; letter-spacing: .32em; font-size: .72rem; margin: 1.25rem 0 0; }
+.enter { margin-top: 2.5rem; color: inherit; text-decoration: none; text-transform: uppercase; letter-spacing: .28em; font-size: .72rem; padding-bottom: 6px; border-bottom: 1px solid currentColor; }
