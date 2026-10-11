@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/app/admin/admin.module.css';
 import { PermanentError, runQueue, type QueueItem } from '@/lib/upload/queue';
 import { uploadToStorage } from '@/lib/upload/client';
+import { uploadProblem } from '@/lib/upload/validate';
 
 const LABELS: Record<QueueItem['status'], string> = {
   pending: 'Em espera',
@@ -26,7 +27,11 @@ export function UploadPanel({ galleryId }: { galleryId: string }) {
     const result = await runQueue(
       files,
       {
-        upload: (file, onProgress) => uploadToStorage(galleryId, 'originals', file, onProgress),
+        upload: (file, onProgress) => {
+          const problem = uploadProblem(file);
+          if (problem) throw new PermanentError(problem);
+          return uploadToStorage(galleryId, 'originals', file, onProgress);
+        },
         ingest: async (originalUrl, file) => {
           const res = await fetch(`/api/admin/galleries/${galleryId}/photos`, {
             method: 'POST',
