@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { getDb } from '@/db/client';
 import { listGalleries } from '@/lib/galleries/repo';
+import { requireAdmin } from '@/lib/auth/require-admin';
 import styles from '../admin.module.css';
 
 export default async function AdminHome() {
+  await requireAdmin();
   const galleries = await listGalleries(await getDb());
   return (
     <main className={styles.main}>

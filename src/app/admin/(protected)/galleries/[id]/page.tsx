@@ -5,8 +5,10 @@ import { listChapters } from '@/lib/galleries/chapters';
 import { listPhotos } from '@/lib/photos/repo';
 import { listFavoritesByVisitor } from '@/lib/favorites/repo';
 import { GalleryEditor } from '@/components/admin/GalleryEditor';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 export default async function EditorPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdmin();
   const { id } = await params;
   const db = await getDb();
   const gallery = await getGalleryById(db, id);
