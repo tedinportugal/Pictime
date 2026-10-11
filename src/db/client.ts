@@ -7,7 +7,10 @@ import { dataDir } from '@/lib/env';
 export type Db = PgDatabase<PgQueryResultHKT, typeof schema>;
 
 let override: Db | null = null;
-let cached: Promise<Db> | null = null;
+
+// No globalThis: o Next.js carrega rotas e páginas em grafos de módulos separados,
+// e duas instâncias PGlite no mesmo diretório divergem.
+const shared = globalThis as typeof globalThis & { __galeriaDb?: Promise<Db> };
 
 export function setDbForTests(db: Db | null): void {
   override = db;
@@ -15,8 +18,8 @@ export function setDbForTests(db: Db | null): void {
 
 export async function getDb(): Promise<Db> {
   if (override) return override;
-  cached ??= createDb();
-  return cached;
+  shared.__galeriaDb ??= createDb();
+  return shared.__galeriaDb;
 }
 
 async function createDb(): Promise<Db> {
