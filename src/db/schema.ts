@@ -60,3 +60,13 @@ export const unlockAttempts = pgTable(
   },
   (t) => [index('unlock_attempts_lookup').on(t.galleryId, t.ip, t.createdAt)],
 );
+
+export const adminLoginAttempts = pgTable(
+  'admin_login_attempts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ip: text('ip').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index('admin_login_attempts_lookup').on(t.ip, t.createdAt)],
+);
