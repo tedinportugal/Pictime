@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Galeria
 
-## Getting Started
+Galerias de entrega com a tua marca para clientes de casamento.
 
-First, run the development server:
+## Desenvolvimento
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # e preencher
+npm run dev                  # http://localhost:3000/admin
+npm test                     # testes unitários/integração
+npm run test:e2e             # fluxo completo (desktop + mobile)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Em desenvolvimento a base de dados (PGlite) e os ficheiros ficam em `.data/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variáveis de ambiente
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variável | Dev | Produção |
+|---|---|---|
+| `ADMIN_PASSWORD` | obrigatória (≥ 12) | obrigatória (≥ 12) |
+| `SESSION_SECRET` | obrigatória (≥ 32) | obrigatória (≥ 32) |
+| `NEXT_PUBLIC_BRAND_NAME` | opcional | o nome do teu estúdio |
+| `DATABASE_URL` | — | Neon (pooled) |
+| `BLOB_READ_WRITE_TOKEN` | — | Vercel Blob |
+| `NEXT_PUBLIC_STORAGE` | — | `blob` |
 
-## Learn More
+## Deploy na Vercel
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. `git push` para um repositório no GitHub e importar o projeto na Vercel.
+2. Em **Storage**, criar uma base **Neon Postgres** e um **Blob store** e ligá-los ao projeto (definem `DATABASE_URL` e `BLOB_READ_WRITE_TOKEN`).
+3. Definir `ADMIN_PASSWORD`, `SESSION_SECRET`, `NEXT_PUBLIC_BRAND_NAME` e `NEXT_PUBLIC_STORAGE=blob`.
+4. Aplicar as migrações: `DATABASE_URL=<url> npm run db:migrate`.
+5. Fazer deploy e abrir `https://<domínio>/admin`.
+6. (Opcional) Ligar um domínio próprio em **Settings → Domains**.
