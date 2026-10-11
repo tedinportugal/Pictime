@@ -1,0 +1,31 @@
+.shell { min-height: 100svh; background: #fafaf8; color: #222; font-family: var(--font-inter), system-ui, sans-serif; }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e2dc; }
+.brand { font-family: var(--font-cormorant); font-style: italic; font-size: 1.5rem; text-decoration: none; }
+.main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+.header h1 { margin: 0; font-weight: 500; }
+.button { display: inline-block; padding: 10px 16px; background: #2b2a26; color: #fff; border: 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
+.button:disabled { opacity: .5; cursor: default; }
+.ghost { padding: 6px 10px; background: transparent; border: 1px solid #d6d2ca; border-radius: 6px; cursor: pointer; text-decoration: none; }
+.danger { color: #a3261b; border-color: #e4b9b4; }
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.list a { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 16px; background: #fff; border: 1px solid #e5e2dc; border-radius: 8px; text-decoration: none; }
+.list span { color: #77736b; font-size: .9rem; }
+.empty { color: #77736b; }
+.panel { background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+.panel h2 { margin: 0 0 12px; font-size: 1.05rem; font-weight: 600; }
+.field { display: grid; gap: 4px; margin-bottom: 12px; }
+.field input, .field select { padding: 9px 10px; border: 1px solid #d6d2ca; border-radius: 6px; background: #fff; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.muted { color: #77736b; font-size: .9rem; }
+.error { color: #a3261b; }
+.dropzone { border: 2px dashed #cfcac0; border-radius: 10px; padding: 28px 16px; text-align: center; }
+.dropzoneActive { border-color: #6b6a4f; background: #f4f2ea; }
+.queue { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 4px; font-size: .9rem; }
+.queue li { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.photoGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.photoCard { border: 1px solid #e5e2dc; border-radius: 8px; overflow: hidden; background: #fff; font-size: .8rem; }
+.photoCard img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.photoCard .row { padding: 6px; }
+.cover { outline: 3px solid #6b6a4f; }
+.login { max-width: 360px; margin: 15vh auto 0; padding: 0 16px; }
