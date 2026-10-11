@@ -46,3 +46,7 @@ e2e/fixtures
 test-results
 playwright-report
 !.env.example
+
+.vercel
+.env*
+!.env.example
